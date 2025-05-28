@@ -12,10 +12,11 @@ const PORT = process.env.PORT || 5001
 
 const jobroutes = require('./routes/Jobroutes')
 const candidateroutes = require('./routes/Candidateroutes')
+const appointmentroutes = require('./routes/Appointmentsroutes')
 
 app.use('/api/jobs',jobroutes)
 app.use('/api/candidate',candidateroutes)
-
+app.use('/api/appointments',appointmentroutes)
 
 
 app.get("/",(req,res)=>{
