@@ -11,8 +11,10 @@ app.use(express.json());
 const PORT = process.env.PORT || 5001
 
 const jobroutes = require('./routes/Jobroutes')
+const candidateroutes = require('./routes/Candidateroutes')
 
 app.use('/api/jobs',jobroutes)
+app.use('/api/candidate',candidateroutes)
 
 
 
