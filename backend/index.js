@@ -13,11 +13,12 @@ const PORT = process.env.PORT || 5001
 const jobroutes = require('./routes/Jobroutes')
 const candidateroutes = require('./routes/Candidateroutes')
 const appointmentroutes = require('./routes/Appointmentsroutes')
+const conversationsroutes = require('./routes/Conversationroutes')
 
 app.use('/api/jobs',jobroutes)
 app.use('/api/candidate',candidateroutes)
 app.use('/api/appointments',appointmentroutes)
-
+app.use('/api/conversations',conversationsroutes)
 
 app.get("/",(req,res)=>{
     res.send("Hello from Home page")
