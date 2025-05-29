@@ -15,14 +15,14 @@ Note: This is actually a simulation of a call, right now I am using a form to co
 - 💾 Data persistence with MySQL (Candidates, Conversations, Appointments, Jobs)
 - 📡 Backend APIs for storing and retrieving structured data
 
-To start the backend server
+- To start the backend server
     ```bash
         cd backend
         npm install
         npm run dev
     ```
 
-To start Frontend server
+- To start Frontend server
     ```bash
         cd frontend
         npm install
@@ -67,7 +67,7 @@ Conversations
     GET /api/conversations/:candidateID
     Get transcript + extracted entities wrt to a candidate
 
-### Connect to your local MySQL
+### 💾Connect to your local MySQL
 
 - Create .env file in your backend
     ```bash
