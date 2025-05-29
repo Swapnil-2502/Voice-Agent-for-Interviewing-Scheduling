@@ -15,15 +15,19 @@ Note: This is actually a simulation of a call, right now I am using a form to co
 - 💾 Data persistence with MySQL (Candidates, Conversations, Appointments, Jobs)
 - 📡 Backend APIs for storing and retrieving structured data
 
-Start the backend server
-    cd backend
-    npm install
-    npm run dev
+To start the backend server
+    ```bash
+        cd backend
+        npm install
+        npm run dev
+    ```
 
-Frontend Setup
-    cd frontend
-    npm install
-    npm run dev
+To start Frontend server
+    ```bash
+        cd frontend
+        npm install
+        npm run dev
+    ```
 
 Make sure backend is running at http://localhost:3002.
 And frontend is running at http://localhost:5173.
@@ -62,3 +66,16 @@ Conversations
 
     GET /api/conversations/:candidateID
     Get transcript + extracted entities wrt to a candidate
+
+### Connect to your local MySQL
+
+- Create .env file in your backend
+    ```bash
+        DB_HOST=localhost
+        DB_USER=root
+        DB_PASSWORD=yourpassword
+        DB_NAME=interview_scheduler
+        PORT=3002
+    ```
+
+    Replace all these with your credentials. Query for database and table creating is on backend/README.md
