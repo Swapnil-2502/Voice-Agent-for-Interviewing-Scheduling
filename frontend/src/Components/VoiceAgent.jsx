@@ -47,14 +47,20 @@ const VoiceAgent = () => {
       const elapsed = Date.now() - startTime;
       const waitTime = 10000 - elapsed;
 
-      // Log answer immediately
-      setAnswers((prev) => [...prev, result]);
-      setlog((prev) => [
-        ...prev,
-        { question: questions[queNum], answer: result }
-      ]);
+        const updatedAnswers = [...answers, result];
+        const updatedLog = [...log, { question: questions[queNum], answer: result }];
 
-      // Delay question transition to complete 10 seconds total
+        setAnswers(updatedAnswers);
+        setlog(updatedLog);
+
+      // Log answer immediately
+    //   setAnswers((prev) => [...prev, result]);
+    //   setlog((prev) => [
+    //     ...prev,
+    //     { question: questions[queNum], answer: result }
+    //   ]);
+
+      
       setTimeout(() => {
         const next = queNum + 1;
         if (next < questions.length) {
@@ -62,7 +68,7 @@ const VoiceAgent = () => {
         } else {
             setDisplay(true)
             speak("Thanks for your responses. We’ll get back to you shortly.");
-            submitBackend()
+            submitBackend(updatedAnswers,updatedLog)
         }
       }, waitTime > 0 ? waitTime : 0);
     };
@@ -94,22 +100,26 @@ const VoiceAgent = () => {
     }
   }, [queNum, started]);
 
-    const extractedentities = (answers) => {
-        const current_ctc_match = answers[2]?.match(/current CTC is (\d+)/i);
-        const expected_ctc_match = answers[2]?.match(/expected CTC is (\d+)/i);
-        const notice_period_match = answers[1]?.match(/(\d+\s*(day|days|month|months))/i);
+    const extractedentities = (fullanswers) => {
+        console.log(fullanswers)
+        const current_ctc_match = fullanswers[2]?.match(/current CTC is (\d+)/i);
+        const expected_ctc_match = fullanswers[2]?.match(/expected CTC is (\d+)/i);
+        const notice_period_match = fullanswers[1]?.match(/(\d+\s*(day|days|month|months))/i);
         
-        let raw_datetime = answers[3] || "";
+        let raw_datetime = fullanswers[3] || "";
         raw_datetime = raw_datetime
             .replace(/next week's\s*/i, "next ")  
             .replace(/time\s*/i, "")        
             .trim();
-
-        const parsedDate = chrono.parseDate(raw_datetime);
+        const referenceDate = new Date();
+        const parsedDate = chrono.parseDate(raw_datetime,referenceDate);
+        console.log(parsedDate)
 
         let formatted_datetime = null;
         if (parsedDate instanceof Date && !isNaN(parsedDate)) {
-            formatted_datetime = parsedDate.toISOString().slice(0, 19).replace("T", " ");
+            const pad = (n) => n.toString().padStart(2, '0');
+            formatted_datetime = `${parsedDate.getFullYear()}-${pad(parsedDate.getMonth() + 1)}-${pad(parsedDate.getDate())} ${pad(parsedDate.getHours())}:${pad(parsedDate.getMinutes())}:${pad(parsedDate.getSeconds())}`;
+
         }
 
 
@@ -121,12 +131,12 @@ const VoiceAgent = () => {
         };
     }
 
-    const submitBackend = async () => {
+    const submitBackend = async (fullanswers = answers, fullLog = log) => {
         const name = sessionStorage.getItem('candidateName')
         const phone = sessionStorage.getItem('candidatePhone')
         const experience = sessionStorage.getItem('experience')
 
-        const extracted = extractedentities(answers);
+        const extracted = extractedentities(fullanswers);
         console.log(name,phone,experience)
         console.log(extracted)
 
@@ -155,13 +165,13 @@ const VoiceAgent = () => {
             date_time: extracted.appointment_datetime,
             }),
         });
-        console.log(log)
+
         await fetch("http://localhost:3002/api/conversations", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
             candidate_id: candidateId,
-            transcript: JSON.stringify(log),
+            transcript: JSON.stringify(fullLog),
             entities_extracted: JSON.stringify(extracted),
             }),
         });

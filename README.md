@@ -4,6 +4,12 @@ An AI-powered voice assistant web app that collects candidate information via vo
 
 ---
 
+## Demo Video link:
+    ```bash
+        https://drive.google.com/file/d/1_MdqMui78Y8MEuh2OjRAYebuUuJ2Paok/view?usp=sharing
+    ```
+
+---
 ## 📌 Features
 
 Note: This is actually a simulation of a call, right now I am using a form to collect name,phone and experience (assuming we already have these fields as we are calling a candidate). And other fields like current_ctc, expected_ctc and notice_period using Regex.
